@@ -1,0 +1,1 @@
+act = activations(net,Xval,'softmax')

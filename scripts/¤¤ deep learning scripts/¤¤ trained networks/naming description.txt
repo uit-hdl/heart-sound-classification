@@ -1,0 +1,29 @@
+CV = cross validation. The variable then contains a cell array of
+networks, where the network of cell i corresponds to the i:th CV-split.
+
+'noNoise' means that only non-noisy recordings were used for network
+training.
+
+'aa' refers to position used for training. If not indicated, or if
+'allPos', then all positions have been used.
+
+'DrOut' implies that dropout has been used during training.
+
+geq = 'greater than or equal to'. Indicates the cutoff severity grade
+used to define the positive class.
+
+AR/MR = aortic/mitral regurgitation.
+
+MurG = murmur grade. MurG2 --> murmur-grade>=2 is target class.
+
+Reg = regression. Target treated as continuous variable.
+
+ValStop --> validation set error was used to stop training. If followed
+by 'Overtrain', then 5 additional epochs were finnished after the
+validation set stoppage criteria was reached.
+
+'nameNetwork'_1234 indicates that networks have been trained only
+for CV-splits 1 to 4.
+
+...TrainingSet... --> network trained on entire training/developement
+set. These networks are used to on the test/holdout set.

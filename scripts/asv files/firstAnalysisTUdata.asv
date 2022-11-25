@@ -1,0 +1,52 @@
+% Convert variable names 
+opts = detectImportOptions('data_lars_27Sep2021.csv');
+opts.DataLines = [1,1];
+
+varNamesCell = readtable('data_lars_27Sep2021.csv',opts);
+varNamesCell = table2cell(varNamesCell);
+opts.DataLines = [2,inf];
+opts.VariableNames = varNamesCell;
+
+opts = setvartype(opts,varNamesCell, 'string');
+HSdata = readtable('data_lars_27Sep2021.csv',opts);
+
+varNamesStr = string(varNamesCell);
+%% Extract the rows with murmur-data
+Imurmur = zeros(1,size(HSdata,1));
+for i=1:size(HSdata,1)
+    Imurmur(i) = length( str2num(HSdata.MURMUR_1NORMAD_T72(i)) );
+end
+Jmurmur = find(Imurmur)';
+MurData0 = HSdata(Jmurmur,:);
+
+%% variables of interest
+% HR_ECHO_T72 (heart rate) : 
+% AGE_T7                   : col 2
+% SEX_T7                   : col 3
+% WEIGHT_T7                : col 4
+% BMI_T7                   : col 5
+% HEART_FAILURE_T7         : col 9
+
+%%%%%% MURMUR DATA %%%%%%%
+% sprintf('variable desription: classification of the heart sounds for each of the 4
+% different auscultation locations. Gives information about Auscultation
+% Location, Heart Cycle location(systole,Diastole), and sound type
+% (Normal,Murmur,Noise).
+% sound_description   columns 41-56
+
+%% Remove Nonsensical Data-rows
+% some of the rows do not make any sense! collect the ones that do make
+% sense:
+cleanId = zeros(1,size(MurData0,1));
+for i=1:size(MurData0,1)
+    cleanId(i) = length( str2num(MurData0.idrand(i) ));  %#ok<*ST2NM>
+end
+
+murData = MurData0(logical(cleanId),:);
+%%
+
+genMurmDataInfoStructure
+
+colNames = {'ARGRADE_T72','MRGRADE_T72','TRPRESE'}
+murData = convertvars(murData,{'ARGRADE_T72','2'},'double');
+
